@@ -30,7 +30,7 @@ public class CONCERNController {
         return studentName != null && !studentName.isBlank() ? this.concernService.getCONCERNsByStudentName(studentName) : this.concernService.getAllCONCERNs();
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<CONCERN> getCONCERN(@PathVariable UUID id) {
         try {
             return ResponseEntity.ok(this.concernService.getCONCERN(id));

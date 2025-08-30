@@ -24,7 +24,8 @@ public class CONCERNController {
     public CONCERNController(CONCERNService concernService) {
         this.concernService = concernService;
     }
-
+    // Get all concerns or filter by student name
+    // SpringDataJPA query method findByStudentName
     @GetMapping
     public List<CONCERN> getCONCERNs(@RequestParam(required = false) String studentName) {
         return studentName != null && !studentName.isBlank() ? this.concernService.getCONCERNsByStudentName(studentName) : this.concernService.getAllCONCERNs();

@@ -22,7 +22,8 @@ public class CONCERN {
     public String status;
     public Instant dateTime;
 
-    public CONCERN(String studentName, String reportedBy, String description, String status, Instant createdAt) {
+    public CONCERN(UUID id, String studentName, String reportedBy, String description, String status, Instant createdAt) {
+        this.id = id;
         this.studentName = studentName;
         this.reportedBy = reportedBy;
         this.description = description;
@@ -31,7 +32,7 @@ public class CONCERN {
     }
 
     public CONCERN() {
-        this("", "", "", "", (Instant)null);
+        this(null, "", "", "", "", null);
     }
 
     public UUID getID() {

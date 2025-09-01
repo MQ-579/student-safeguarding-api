@@ -7,8 +7,27 @@ import java.time.Instant;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the {@link CONCERNService} class using JUnit and Mockito.
+ * 
+ * <p>This class tests the CRUD operations of {@link CONCERNService} by mocking
+ * {@link CONCERNRepository}. It verifies that the service methods behave correctly
+ * under various scenarios including success and failure cases.</p>
+ * 
+ * <p>Tested scenarios include:</p>
+ * <ul>
+ *  <li>Retrieving all concerns</li>
+ *  <li>Retrieving a concern by ID (found and not found)</li>
+ *  <li>Creating a concern (valid and invalid data)</li>
+ *  <li>Updating a concern (success and not found)</li>
+ *  <li>Deleting a concern (success and not found)</li>
+ *  <li>Retrieving concerns by student name</li>
+ * </ul>
+ * 
+ */
 class CONCERNServiceTest {
 
     @Mock
@@ -20,6 +39,10 @@ class CONCERNServiceTest {
     private CONCERN concern;
     private UUID concernId;
 
+    /**
+     * Sets up the test environment before each test case.
+     * Initializes Mockito annotations and creates a sample CONCERN object.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -34,6 +57,11 @@ class CONCERNServiceTest {
         );
     }
 
+    /**
+     * Tests retrieving all concerns.
+     * Verifies that the service returns the correct list of concerns from the repository.
+     * 
+     */
     @Test
     void testGetAllConcerns() {
         when(concernRepository.findAll()).thenReturn(List.of(concern));
@@ -45,6 +73,10 @@ class CONCERNServiceTest {
         verify(concernRepository, times(1)).findAll();
     }
 
+    /**
+     * Tests retrieving a concern by ID when the concern exists.
+     * Verifies that the service returns the correct concern.
+     */
     @Test
     void testGetConcern_Found() {
         when(concernRepository.findById(concernId)).thenReturn(Optional.of(concern));
@@ -56,6 +88,10 @@ class CONCERNServiceTest {
         verify(concernRepository, times(1)).findById(concernId);
     }
 
+    /**
+     * Tests retrieving a concern by ID when the concern does not exist.
+     * Verifies that the service throws a NoSuchElementException.
+     */
     @Test
     void testGetConcern_NotFound() {
         when(concernRepository.findById(concernId)).thenReturn(Optional.empty());
@@ -63,6 +99,10 @@ class CONCERNServiceTest {
         assertThrows(NoSuchElementException.class, () -> concernService.getCONCERN(concernId));
     }
 
+    /**
+     * Tests creating a concern with valid data.
+     * Verifies that the service saves and returns the concern correctly.
+     */
     @Test
     void testCreateConcern_Valid() {
         when(concernRepository.save(concern)).thenReturn(concern);
@@ -74,11 +114,19 @@ class CONCERNServiceTest {
         verify(concernRepository, times(1)).save(concern);
     }
 
+    /**
+     * Tests creating a concern with invalid data (null).
+     * Verifies that the service throws an IllegalArgumentException.
+     */
     @Test
     void testCreateConcern_Invalid() {
         assertThrows(IllegalArgumentException.class, () -> concernService.createCONCERN(null));
     }
 
+    /**
+     * Tests updating a concern successfully.
+     * Verifies that the service updates and returns the concern correctly.
+     */
     @Test
     void testUpdateConcern_Success() {
         CONCERN updatedConcern = new CONCERN(
@@ -99,6 +147,10 @@ class CONCERNServiceTest {
         assertEquals("Updated description", result.getDescription());
     }
 
+    /**
+     * Tests updating a concern that does not exist.
+     * Verifies that the service throws a NoSuchElementException.
+     */
     @Test
     void testUpdateConcern_NotFound() {
         when(concernRepository.findById(concernId)).thenReturn(Optional.empty());
@@ -106,6 +158,10 @@ class CONCERNServiceTest {
         assertThrows(NoSuchElementException.class, () -> concernService.updateCONCERN(concernId, concern));
     }
 
+    /**
+     * Tests deleting a concern successfully.
+     * Verifies that the service calls the repository to delete the concern.
+     */
     @Test
     void testDeleteConcern_Success() {
         when(concernRepository.existsById(concernId)).thenReturn(true);
@@ -115,6 +171,10 @@ class CONCERNServiceTest {
         verify(concernRepository, times(1)).deleteById(concernId);
     }
 
+    /**
+     * Tests deleting a concern that does not exist.
+     * Verifies that the service throws a NoSuchElementException.
+     */
     @Test
     void testDeleteConcern_NotFound() {
         when(concernRepository.existsById(concernId)).thenReturn(false);
@@ -122,6 +182,10 @@ class CONCERNServiceTest {
         assertThrows(NoSuchElementException.class, () -> concernService.deleteCONCERN(concernId));
     }
 
+    /**
+     * Tests retrieving concerns by student name.
+     * Verifies that the service returns the correct list of concerns for the given student name.
+     */
     @Test
     void testGetConcernsByStudentName() {
         when(concernRepository.findByStudentName("Alice Johnson")).thenReturn(List.of(concern));

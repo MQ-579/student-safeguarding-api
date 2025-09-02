@@ -64,4 +64,32 @@ You can now test your endpoints using [Postman](https://www.postman.com) or your
 
 The JSON representation of a CONCERN that you'll get in responses or provide in the request body for `POST` and `PUT` requests will resemble the following:
 
+```json
+{
+  "id": "b45fc062-7d3d-4738-bc76-6ae23d27506b",
+  "studentName": "Eka-ete",
+  "reportedBy": "Mum",
+  "description": "Eka-ete said she is maltreated by her teacher at school.",
+  "status": "resolved",
+  "dateTime": "2025-08-29T09:20:00Z"
+```
 
+> :bulb: **Note:** Remember that the `id` property may not be needed for all request types.
+
+### Exercise 3
+
+1. Create a `concerns` package inside the `student-safeguarding-api/src/test/java/com/queenmmama/safeguarding/safeguarding_api` package
+2.  **Carry out JUnit test**: Create a CONCERNServiceTest class
+3. Run the tests with `./mvnw clean test`
+4. Examine the results. Do any tests fail? If so, what reasons are given? Modify your code so all tests pass
+5. Commit your changes
+
+### Exercise 4
+
+1. Create a new API endpoint to return CONCERNs for a specific student:
+   1. Create a method in your repository interface called `findByStudentName` that accepts a string `StudentName` parameter.
+   2. Create a method in your service class called `getCONCERNsByBorrower`.
+   3. Extend the `getCONCERN` method of your controller to accept an optional query string parameter, e.g.: `getCONCERNs(@RequestParam(required = false) String StudentName)`
+   4. Check the value of the `StudentName` parameter to determine whether to call the existing service method or the new, filtered, one
+2. Test the modified endpoint
+3. Commit your changes

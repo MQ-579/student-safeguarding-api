@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 /*
  * REST controller that exposes CRUD API endpoints for managing safeguarding concerns.
@@ -51,6 +54,7 @@ public class CONCERNController {
      */
     
     @GetMapping
+    @Operation(summary = "Get all concerns or filter by student name", description = "Retrieves all concerns or filters concerns by the specified student name if provided.")   
     public List<CONCERN> getCONCERNs(@RequestParam(required = false) String studentName) {
         return studentName != null && !studentName.isBlank() ? this.concernService.getCONCERNsByStudentName(studentName) : this.concernService.getAllCONCERNs();
     }
@@ -65,6 +69,7 @@ public class CONCERNController {
      */
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get a concern by ID", description = "Retrieves the concern with the specified ID.")
     public ResponseEntity<CONCERN> getCONCERN(@PathVariable UUID id) {
         try {
             return ResponseEntity.ok(this.concernService.getCONCERN(id));
@@ -83,6 +88,11 @@ public class CONCERNController {
      */
 
     @PostMapping
+    @Operation(summary = "Create a new concern", description = "Creates a new safeguarding concern with the provided details.") 
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Concern created successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid concern details provided")     
+    })
     public ResponseEntity<CONCERN> createCONCERN(@RequestBody CONCERN concern) {
         try {
             CONCERN Saved = this.concernService.createCONCERN(concern);
@@ -103,6 +113,7 @@ public class CONCERNController {
      */
 
     @PutMapping({"/{id}"})
+    @Operation(summary = "Update a concern by ID", description = "Updates the concern with the specified ID using the provided details.")   
    public ResponseEntity<CONCERN> updateCONCERN(@PathVariable UUID id, @RequestBody CONCERN updatedCONCERN) {
       try {
          CONCERN updated = this.concernService.updateCONCERN(id, updatedCONCERN);
@@ -122,6 +133,7 @@ public class CONCERNController {
     */
 
     @DeleteMapping({"/{id}"})
+    @Operation(summary = "Delete a concern by ID", description = "Deletes the concern with the specified ID.")
      public ResponseEntity<Void> deleteCONCERN(@PathVariable UUID id) {
       try {
          this.concernService.deleteCONCERN(id);
